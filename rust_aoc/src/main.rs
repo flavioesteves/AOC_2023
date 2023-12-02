@@ -1,8 +1,5 @@
-use rust_aoc::utils::{read_file, split_text_lines};
+use rust_aoc::day_1::Part1;
 
 fn main() {
-    let y = read_file("day1.txt".to_string());
-    let x = split_text_lines(y);
-    println!("Hello, world!");
-    println!("Splitted {:?}", x);
+    let _day1 = Part1::retrieve_calibration_values();
 }
