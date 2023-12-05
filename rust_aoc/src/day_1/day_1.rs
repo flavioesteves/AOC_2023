@@ -70,7 +70,7 @@ mod tests {
 
     #[test]
     fn test_sample() {
-        let test_example = "two1nine
+        let mock = "two1nine
 eightwothree
 abcone2threexyz
 xtwone3four
@@ -78,7 +78,7 @@ xtwone3four
 zoneight234
 7pqrstsixteen";
 
-        let values = calculate_values(test_example.to_string(), true);
+        let values = calculate_values(mock.to_string(), true);
         let sum_value = sum_values(values);
 
         assert_eq!(281, sum_value);
