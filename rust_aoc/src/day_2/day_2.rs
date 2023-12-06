@@ -43,7 +43,7 @@ fn validate_games(game: String) -> bool {
     let games: Vec<_> = split_data[1].split(";").collect();
 
     for record in games {
-        let game_record = calc(record.to_string());
+        let game_record = is_possible(record.to_string());
         if !game_record {
             return false;
         };
@@ -52,12 +52,12 @@ fn validate_games(game: String) -> bool {
     true
 }
 
-fn calc(record: String) -> bool {
+fn is_possible(record: String) -> bool {
     let split_records: Vec<_> = record.split(",").collect();
     for record in split_records {
         let rec: Vec<_> = record.split(" ").collect();
         let color = Option::Some(rec[2]);
-        let points: i32 = rec[1].parse().expect("Failed to convert to number");
+        let points: i32 = rec[1].parse().expect("Failed to convert into i32");
 
         match color {
             Some("red") => {
