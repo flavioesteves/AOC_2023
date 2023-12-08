@@ -114,8 +114,7 @@ fn is_symbol(c: char) -> bool {
 
 #[cfg(test)]
 mod tests {
-    use crate::day_3::day_3::{gear_ratios, get_part_numbers};
-    use crate::utils::read_file;
+    use crate::day_3::day_3::get_part_numbers;
     #[test]
     fn test_day3_part1() {
         let mock = "..........
@@ -139,13 +138,9 @@ mod tests {
 ......755.
 ...$.*....
 .664.598..";
-        let schematic = read_file("day3.txt".to_string());
-        let result = get_part_numbers(schematic);
-
-        let r = get_part_numbers(mock.to_string());
-        let f = gear_ratios();
+        let result = get_part_numbers(mock.to_string());
         //546312
-        assert_eq!(r, 8722)
+        assert_eq!(result, 8722)
         //assert_eq!(result, 546312)
     }
 }
