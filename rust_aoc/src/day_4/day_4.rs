@@ -52,7 +52,6 @@ fn win_scratchcards(cards: String) -> i32 {
     let cards: Vec<String> = split_text_lines(cards);
     let mut scratchcards = vec![1usize; cards.len()];
 
-    println!("card len {}", cards.len());
     for (index, card) in cards.iter().enumerate() {
         let scratchcard_numbers = match_numbers(card.to_string());
         let count = scratchcard_numbers
@@ -64,11 +63,7 @@ fn win_scratchcards(cards: String) -> i32 {
             })
             .sum::<usize>();
 
-        println!("count {}", count);
-        println!("index {:?}", index + 1..index + 1 + count);
-
         for i in index + 1..index + 1 + count {
-            println!("For loop");
             scratchcards[i] += scratchcards[index];
         }
     }
