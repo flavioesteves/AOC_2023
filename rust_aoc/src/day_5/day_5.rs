@@ -1,5 +1,5 @@
 use crate::utils::{read_file, split_text_lines};
-use std::ops::Range;
+use std::{i64, ops::Range};
 
 #[derive(Debug, Clone, Default)]
 struct Almanac {
@@ -38,15 +38,28 @@ impl AlmanacMaps {
         }
         value
     }
+    fn range_contains_seed(&self, seed: i64) -> i64 {
+        for map in &self.maps {
+            let seed_value = seed - map.delta;
+            if map.range.contains(&seed_value) {
+                return seed_value;
+            }
+        }
+        seed
+    }
 }
 
 pub fn run() {
     let load_data = read_file("day5.txt".to_string());
     let data_parsed = split_text_lines(load_data);
     let mapping = map_data(data_parsed);
-    let result = calculate_location(mapping);
+    let result = calculate_location(mapping.clone());
+    let result_2 = calculate_range_location(mapping);
 
     println!("Day 5 part 1 result: {}", result);
+
+    //Part 2 currently consumes too much memory
+    println!("Day 5 part 2 result: {}", result_2);
 }
 
 fn map_data(data_parsed: Vec<String>) -> Almanac {
@@ -90,6 +103,36 @@ fn calculate_location(almanac: Almanac) -> i64 {
     location
 }
 
+fn calculate_range_location(almanac: Almanac) -> i64 {
+    let seeds = range_of_seeds(almanac.seeds);
+    let mut location = 1_i64;
+
+    // Loop until find the result
+    loop {
+        let mut current = location;
+        for map in almanac.map.iter().rev() {
+            current = map.range_contains_seed(current);
+        }
+        for seed in &seeds {
+            if seed.contains(&current) {
+                return location;
+            }
+        }
+        location += 1;
+    }
+}
+
+fn range_of_seeds(seeds: Vec<i64>) -> Vec<Range<i64>> {
+    let seeds_range = seeds
+        .chunks(2)
+        .map(|vec| Range {
+            start: vec[0],
+            end: vec[0] + vec[1],
+        })
+        .collect::<Vec<Range<i64>>>();
+    seeds_range
+}
+
 // destination range start - source range start - range length
 // 50 98 2:q
 //
@@ -97,7 +140,7 @@ fn calculate_location(almanac: Almanac) -> i64 {
 #[cfg(test)]
 mod tests {
     use crate::{
-        day_5::day_5::{calculate_location, map_data},
+        day_5::day_5::{calculate_location, calculate_range_location, map_data},
         utils::split_text_lines,
     };
 
@@ -139,8 +182,10 @@ humidity-to-location map:
     fn test_day5_part1() {
         let data_parsed = split_text_lines(MOCK_DATA.to_string());
         let map = map_data(data_parsed);
-        let lowest_location_number: i64 = calculate_location(map);
+        let lowest_location_number: i64 = calculate_location(map.clone());
+        let lowest_range_location: i64 = calculate_range_location(map);
 
         assert_eq!(lowest_location_number, 35);
+        assert_eq!(lowest_range_location, 46);
     }
 }
